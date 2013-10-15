@@ -40,6 +40,7 @@ enum {
 	kPluginShare,
 	kPluginUser,
 	kPluginSocial,
+	kPluginRaw
 };
 
 #define ANDROID_PLUGIN_PACKAGE_PREFIX			"org/cocos2dx/plugin/"
@@ -139,6 +140,9 @@ PluginProtocol* PluginFactory::createPlugin(const char* name)
 		case kPluginSocial:
 		    pRet = new ProtocolSocial();
 		    break;
+		case kPluginRaw:
+			pRet = new PluginProtocol();
+		    break;		
 		default:
 			break;
 		}
