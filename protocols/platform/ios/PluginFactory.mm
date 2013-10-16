@@ -33,6 +33,7 @@ THE SOFTWARE.
 #import "InterfaceAnalytics.h"
 #import "InterfaceIAP.h"
 #import "InterfaceShare.h"
+#import "InterfaceRaw.h"
 
 namespace cocos2d { namespace plugin {
 
@@ -90,6 +91,9 @@ PluginProtocol* PluginFactory::createPlugin(const char* name)
         } else
         if ([obj conformsToProtocol:@protocol(InterfaceShare)]) {
             pRet = new ProtocolShare();
+        }
+        if ([obj conformsToProtocol:@protocol(InterfaceRaw)]) {
+            pRet = new PluginProtocol();
         } else {
             PluginUtilsIOS::outputLog("Plugin %s not implements a right protocol", name);
         }
