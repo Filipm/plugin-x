@@ -27,7 +27,7 @@
 - (void) speak:(NSString *)text
 {
     iSpeechSDK* sdk = [iSpeechSDK sharedSDK];
-    sdk.APIKey = @"21dd4280a325b7f81905e1fd07c27d34";
+    sdk.APIKey = @"developerdemokeydeveloperdemokey";
 
     ISSpeechSynthesis * synthesis = [[ ISSpeechSynthesis alloc] initWithText:text];
     [synthesis setVoice:m_voiceType];

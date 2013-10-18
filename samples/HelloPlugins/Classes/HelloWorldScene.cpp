@@ -6,6 +6,7 @@
 #include "TestIAPOnlineScene.h"
 #include "TestUserScene.h"
 #include "TestSocialScene.h"
+#include "TestISpeechScene.h"
 
 USING_NS_CC;
 
@@ -19,6 +20,7 @@ std::string g_testCases[] = {
     "Test User",
     "Test Social",
 #endif
+	"Test iSpeech",
 };
 
 Scene* HelloWorld::scene()
@@ -105,6 +107,8 @@ void HelloWorld::menuCallback(Object* pSender)
         break;
     case 6:
         newScene = TestSocial::scene();
+    case 7:
+        newScene = TestISpeech::scene();
     default:
         break;
     }
