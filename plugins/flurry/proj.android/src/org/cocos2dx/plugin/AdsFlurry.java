@@ -248,5 +248,6 @@ public class AdsFlurry implements InterfaceAds, FlurryAdListener {
     @Override
     public void spaceDidReceiveAd(String arg0) {
         AdsWrapper.onAdsResult(this, AdsWrapper.RESULT_CODE_AdsReceived, "Ads of flurry received");
+        FlurryAds.displayAd(mContext, arg0, (ViewGroup) mBannerView);
     }
 }
