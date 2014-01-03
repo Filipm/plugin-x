@@ -42,6 +42,7 @@ public class AdsAdmob implements InterfaceAds {
 	private static Activity mContext = null;
 	private static boolean bDebug = false;
 	private static AdsAdmob mAdapter = null;
+	private static InterstitialAd mInterstitialAd = null;
 
 	private AdView adView = null;
 	private String mPublishID = "";
@@ -80,7 +81,7 @@ public class AdsAdmob implements InterfaceAds {
 
 	@Override
 	public String getSDKVersion() {
-		return "6.3.1";
+		return "6.4.1";
 	}
 
 	@Override
@@ -90,6 +91,50 @@ public class AdsAdmob implements InterfaceAds {
 			LogD("init AppInfo : " + mPublishID);
 		} catch (Exception e) {
 			LogE("initAppInfo, The format of appInfo is wrong", e);
+		}
+
+		try {
+
+			if(!devInfo.containsKey("AdmobType")) {
+				return;
+			}
+
+			String strType = devInfo.get("AdmobType");
+		    int adsType = Integer.parseInt(strType);
+
+		    if( adsType != ADMOB_TYPE_FULLSCREEN) {
+		    	return;
+		    }
+
+			PluginWrapper.runOnMainThread(new Runnable() {
+	            @Override
+	            public void run() {
+	                try {
+	                	mInterstitialAd = new InterstitialAd(mContext, mPublishID);
+	                	mInterstitialAd.setAdListener( new AdmobAdsListener());
+	              		AdRequest req = new AdRequest();
+
+						try {
+							if (mTestDevices != null) {
+								Iterator<String> ir = mTestDevices.iterator();
+								while(ir.hasNext())
+								{
+									req.addTestDevice(ir.next());
+								}
+							}
+						} catch (Exception e) {
+							LogE("Error during add test device", e);
+						}
+
+	                	mInterstitialAd.loadAd(req);
+	                } catch (Exception e) {
+	                    LogE("Error during initialization fullscreen ad.", e);
+	                }
+	            }
+	        });
+
+        } catch (Exception e) {
+			LogE("Error during configDeveloperInfo", e);
 		}
 	}
 
@@ -109,7 +154,13 @@ public class AdsAdmob implements InterfaceAds {
                     break;
 	            }
 	        case ADMOB_TYPE_FULLSCREEN:
-	            LogD("Now not support full screen view in Admob");
+	            {
+	            	if( mInterstitialAd.isReady() ) {
+	            		mInterstitialAd.show();
+	            	} else {
+	            		Log.i(LOG_TAG, "InterstitialAd not ready");
+	            	}
+	            }
 	            break;
 	        default:
 	            break;
@@ -136,7 +187,7 @@ public class AdsAdmob implements InterfaceAds {
                 hideBannerAd();
                 break;
             case ADMOB_TYPE_FULLSCREEN:
-                LogD("Now not support full screen view in Admob");
+                LogD("Method hide not supported by full screen ad in Admob");
                 break;
             default:
                 break;
